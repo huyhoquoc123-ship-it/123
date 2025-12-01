@@ -1,0 +1,173 @@
+(function(self, ns){
+    var GENERIC_BUNDLE_URL = "https://fast.appcues.com/generic/main/7.7.0/appcues.main.76c21c6d771fd87653c0857b9e3a27556fd516e7.js";
+    var ACCOUNT_DETAILS = {"API_HOSTNAME":"api.appcues.net","GENERIC_BUNDLE_DOMAIN":"https://fast.appcues.com","GENERIC_BUNDLE_PATH":"/generic/main/7.7.0/appcues.main.76c21c6d771fd87653c0857b9e3a27556fd516e7.js","RELEASE_ID":"76c21c6d771fd87653c0857b9e3a27556fd516e7","VERSION":"7.7.0","account":{"buffer":0,"entitlements":{"enableCTTEventIntegrations":false},"gates":{"enableCTTEventIntegrations":false,"enableClientSideEventIntegrations":false,"responseFormatV2Enabled":true},"isTrial":false,"isTrialExpired":true,"skipAutoProperties":false,"stripQueryParams":null,"stripePlanId":"37486-growth-yearly"},"accountId":"146413","custom_events":[{"accountId":null,"buildUrl":null,"createdAt":null,"createdBy":null,"disabledAt":null,"disabledBy":null,"enabled":null,"enabledAt":null,"enabledBy":null,"id":null,"name":"appcues_custom:unified-search-bar-clicked","state":"ENABLED","targets":[{"event":"click","selector":{"selector":"[aria-haspopup] "}}],"updatedAt":null,"updatedBy":null,"urls":["https://anaconda.com/app/search?query=kub"]},{"accountId":null,"buildUrl":null,"createdAt":null,"createdBy":null,"disabledAt":null,"disabledBy":null,"enabled":null,"enabledAt":null,"enabledBy":null,"id":null,"name":"appcues_custom:Toolbox-open","state":"ENABLED","targets":[{"event":"click","selector":{"selector":"#jp-main-content-panel [data-orientation=\"vertical\"]:nth-of-type(1) .lm-mod-current "}}],"updatedAt":null,"updatedBy":null,"urls":["https://nb.anaconda.com/jupyterhub/user/bb96fde6-ff93-4d57-83e7-dad51e736daf/lab/workspaces/auto-d?"]},{"accountId":null,"buildUrl":null,"createdAt":null,"createdBy":null,"disabledAt":null,"disabledBy":null,"enabled":null,"enabledAt":null,"enabledBy":null,"id":null,"name":"appcues_custom:Docs Click","state":"ENABLED","targets":[{"event":"click","selector":{"selector":".grid-container div:nth-of-type(4) .icon-wrapper "}}],"updatedAt":null,"updatedBy":null,"urls":["https://anaconda.com/app/"]},{"accountId":null,"buildUrl":null,"createdAt":null,"createdBy":null,"disabledAt":null,"disabledBy":null,"enabled":null,"enabledAt":null,"enabledBy":null,"id":null,"name":"appcues_custom:Learning Click","state":"ENABLED","targets":[{"event":"click","selector":{"selector":"ul [container=\"body\"]:nth-of-type(3) "}}],"updatedAt":null,"updatedBy":null,"urls":["https://anaconda.cloud/"]},{"accountId":null,"buildUrl":null,"createdAt":null,"createdBy":null,"disabledAt":null,"disabledBy":null,"enabled":null,"enabledAt":null,"enabledBy":null,"id":null,"name":"appcues_custom:Launch Remote Kernel","state":"ENABLED","targets":[{"event":"click","selector":{"selector":".jp-Launcher-content .jp-Launcher-cardContainer [title=\"Launch a Remote Kernel\"]:nth-of-type(1) "}}],"updatedAt":null,"updatedBy":null,"urls":["*"]},{"accountId":null,"buildUrl":null,"createdAt":null,"createdBy":null,"disabledAt":null,"disabledBy":null,"enabled":null,"enabledAt":null,"enabledBy":null,"id":null,"name":"appcues_custom:GPU Kernels","state":"ENABLED","targets":[{"event":"click","selector":{"selector":".jp-Launcher-content .jp-Launcher-cardContainer [title=\"Show GPU Kernels\"]:nth-of-type(1) "}}],"updatedAt":null,"updatedBy":null,"urls":["*"]},{"accountId":null,"buildUrl":null,"createdAt":null,"createdBy":null,"disabledAt":null,"disabledBy":null,"enabled":null,"enabledAt":null,"enabledBy":null,"id":null,"name":"appcues_custom:Continue to Payment","state":"ENABLED","targets":[{"event":"click","selector":{"selector":".ConfirmPayment > div:nth-of-type(3) "}}],"updatedAt":null,"updatedBy":null,"urls":["*"]},{"accountId":null,"buildUrl":null,"createdAt":null,"createdBy":null,"disabledAt":null,"disabledBy":null,"enabled":null,"enabledAt":null,"enabledBy":null,"id":null,"name":"appcues_custom:NewProject","state":"ENABLED","targets":[{"event":"click","selector":{"selector":"#jp-running-toolbox [href=\"\\/\"]:nth-child(3) p "}}],"updatedAt":null,"updatedBy":null,"urls":["https://nb.anaconda.cloud/*"]}],"defaultAppId":"568f8a66-29f9-4cf6-8606-3950215bc4a7","integrations":{"heap":{"createdAt":null,"createdBy":null,"integrationId":"146413:heap","isEnabled":true,"type":"heap","updatedAt":null,"updatedBy":null}},"styling":{}};
+    var VERSION = ACCOUNT_DETAILS.VERSION;
+    var RELEASE_ID = ACCOUNT_DETAILS.RELEASE_ID;
+    var GENERIC_BUNDLE_DOMAIN = ACCOUNT_DETAILS.GENERIC_BUNDLE_DOMAIN;
+    var accountId = ACCOUNT_DETAILS.accountId;
+    var isBootstrapped = false;
+
+    self.AppcuesBundleSettings = {
+      accountId: accountId,
+      VERSION: VERSION,
+      RELEASE_ID: RELEASE_ID,
+      GENERIC_BUNDLE_DOMAIN: GENERIC_BUNDLE_DOMAIN,
+      GENERIC_BUNDLE_PATH: ACCOUNT_DETAILS.GENERIC_BUNDLE_PATH,
+      styling:  ACCOUNT_DETAILS.styling,
+      integrations: ACCOUNT_DETAILS.integrations,
+      account: ACCOUNT_DETAILS.account,
+      events: ACCOUNT_DETAILS.custom_events,
+      defaultAppId: ACCOUNT_DETAILS.defaultAppId,
+      API_HOSTNAME: ACCOUNT_DETAILS.API_HOSTNAME
+    };
+
+    var skipAMD = false;
+    var windowGlobals = window["AppcuesSettings"];
+    if (
+      windowGlobals &&
+      typeof windowGlobals === "object" &&
+      windowGlobals.skipAMD === true
+    ) {
+      skipAMD = true;
+    }
+
+    var doc = self.document;
+    self[ns] = self[ns] || [];
+    var Appcues = self[ns];
+    if (Appcues.invoked) {
+        if (self.console && console.error) {
+            console.error('Appcues snippet included twice.');
+        }
+        return;
+    }
+
+    if (Appcues.identify) return;
+    Appcues.invoked = true;
+
+    var methods = [
+        "identify",
+        "track",
+        "page",
+        "anonymous",
+        "start",
+        "show",
+        "loadLaunchpad",
+        "clearShow",
+        "on",
+        "off",
+        "once",
+        "reset",
+        "debug",
+        "user",
+        "call",
+        "settings",
+        "content",
+        "initMixpanel",
+        "initHeap",
+        "initIntercom",
+        "initCIO",
+        "initWoopra",
+        "initAmplitude",
+        "initKlaviyo",
+        "initTD",
+        "initLl",
+        "initCalq",
+        "initKM",
+        "initGA",
+        "initGTM",
+        "initSegment",
+        "initRudderstack",
+        "initBraze",
+        "initFullStory",
+        "initHotjar",
+        "initLogRocket",
+        "group",
+
+        // Methods solely for the injectable
+        "injectContent",
+        "injectStyles",
+    ];
+
+    var promises = [
+        "user"
+    ];
+
+    function factory(method){
+        return function(){
+            var args = Array.prototype.slice.call(arguments);
+            if (isBootstrapped) {
+              self.Appcues[method].apply(self.Appcues, args);
+            } else {
+              args.unshift(method);
+              Appcues.push(args);
+            }
+            return self.Appcues;
+        };
+    }
+
+    // For each of our methods, generate a queueing stub.
+    for (var i = 0; i < methods.length; i++) {
+        var key = methods[i];
+        Appcues[key] = factory(key);
+    }
+
+    for (var i = 0; i < promises.length; i++) {
+        var key = promises[i];
+        Appcues[key] = function() {
+          var args = Array.prototype.slice.call(arguments);
+          if (isBootstrapped) {
+            return self.Appcues[key].apply(self.Appcues, args);
+          } else {
+            return new Promise(function(resolve, _reject) {
+              args.unshift(resolve);
+              args.unshift(key);
+              Appcues.push(args);
+            });
+          }
+        };
+    }
+
+    if (
+      !skipAMD &&
+      typeof window.define === "function" &&
+      window.define.amd &&
+      (window.define.amd.vendor == null ||
+        window.define.amd.vendor !== "dojotoolkit.org")
+    ) {
+      window.define(function() { return Appcues; });
+    }
+
+    function load(){
+        var bundleScript = doc.createElement("script");
+
+        bundleScript.crossOrigin = "anonymous";
+        bundleScript.integrity = "sha256-uDtO02ysSwwf88FyJJpHWfhwtS397gZtltF5UlmYj7A=";
+
+        bundleScript.type = "text/javascript";
+        bundleScript.src = GENERIC_BUNDLE_URL;
+        bundleScript.async = true;
+        bundleScript.onload = function () {
+            isBootstrapped = true;
+            Appcues.forEach(function(call) {
+                var fnName = call[0];
+                var args = call.slice(1);
+                if (promises.indexOf(fnName) === -1) {
+                  self[ns] && self[ns][fnName] &&
+                      self[ns][fnName].apply(self[ns], args);
+                } else {
+                  var resolve = args[0];
+                  var promiseArgs = args.slice(1);
+                  self[ns] && self[ns][fnName] &&
+                    self[ns][fnName].apply(self[ns], promiseArgs).then(
+                      function() { resolve(arguments[0]); }
+                    );
+                }
+            });
+        };
+
+        var firstScript = doc.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(bundleScript, firstScript);
+    }
+    Appcues.SNIPPET_VERSION = VERSION;
+    load();
+})(window, 'Appcues');
